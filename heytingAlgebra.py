@@ -7,7 +7,7 @@ class Poset:
         self.relation = relation
 
 
-    def meet(self,X):
+    def meet(self,X): #i should checking if X is subset of P!
         'Calculates greatest lower bound of X in the underlying set'
         lowerBounds = []
         for y in self.baseSet:
@@ -27,6 +27,27 @@ class Poset:
             if bFlag == True:
                 glb = y
         return glb
+
+
+    def join(self,X): #i should checking if X is subset of P!
+        upperBounds = []
+        for y in self.baseSet:
+            flag = True
+            for x in X:
+                #print(y," <= ",x," ?",": ",self.relation(y,x))
+                if self.relation(x,y) != True:
+                    flag = False
+            if (flag):
+                upperBounds.append(y)
+        lub = None
+        for y in upperBounds: #for every y,z E lowerBounds
+            bFlag = True
+            for z in upperBounds: 
+                if self.relation(y,z) == False: #if z is not less than y
+                    bFlag = False #then y is not the greatest lower bound
+            if bFlag == True:
+                lub = y
+        return lub
             
 ############ EXAMPLES OF POSETS #####################        
         
@@ -43,7 +64,7 @@ def subset(x,y):
     return set(x).issubset(y)
 
 
-a = Poset(powsetGen(["a","b","c"]),subset)
+a = Poset(powsetGen(["a","b","c"]),subset) #powerset of a,b,c ordered by subset relation
 
 
 def prefix(x,y):
